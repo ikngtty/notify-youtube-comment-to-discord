@@ -1,3 +1,7 @@
+function main() {
+  checkComments();
+}
+
 function checkComments() {
   // TODO: fetch all pages
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
