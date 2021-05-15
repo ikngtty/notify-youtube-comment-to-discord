@@ -2,6 +2,7 @@
 function setProperties() {
   ps.setProperties({
     PLAYLIST_ID: '*****',
+    LAST_CHECKED_AT: '2020-01-01T00:00:00Z', // ISO8601
   });
 }
 
