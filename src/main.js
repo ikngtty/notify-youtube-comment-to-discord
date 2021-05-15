@@ -42,6 +42,9 @@ function fetchComments(from, to) {
       commentThread.replies.comments.forEach(reply => {
         console.log('reply', reply);
         if (isTargetComment(reply)) {
+          // HACK: circular dependency
+          // Had better to move values to a new object.
+          reply.snippet.parentComment = topLevelComment;
           fetched.push(reply);
         }
       });
