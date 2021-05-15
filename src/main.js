@@ -7,7 +7,7 @@ function checkComments() {
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
     // fields: 'items(contentDetails(videoId),snippet(title))',
     maxResults: 50,
-    playlistId: PropertiesService.getScriptProperties().getProperty('PLAYLIST_ID'),
+    playlistId: ps.getProperty('PLAYLIST_ID'),
   });
   console.log('playlistItemsResult', playlistItemsResult);
   playlistItemsResult.items.forEach(playlistItem => {

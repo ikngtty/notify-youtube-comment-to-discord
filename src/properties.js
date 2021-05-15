@@ -1,12 +1,12 @@
 // need to fill values in code directly and run once to initialize this project
 function setProperties() {
-  PropertiesService.getScriptProperties().setProperties({
+  ps.setProperties({
     PLAYLIST_ID: '*****',
   });
 }
 
 // for debug
 function getProperties() {
-  const properties = PropertiesService.getScriptProperties().getProperties();
+  const properties = ps.getProperties();
   console.log(properties);
 }
