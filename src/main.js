@@ -31,7 +31,7 @@ function fetchYouTubeComments(from, to) {
     commentThreadsResult.items.forEach(commentThread => {
       const topLevelComment_ = commentThread.snippet.topLevelComment;
       console.log('topLevelComment_', topLevelComment_);
-      const topLevelComment = YouTubeComment.fromTopLevelComment(topLevelComment_);
+      const topLevelComment = new YouTubeComment(topLevelComment_, null);
 
       if (isTargetComment(topLevelComment)) {
         targets.push(topLevelComment);
@@ -42,7 +42,7 @@ function fetchYouTubeComments(from, to) {
       }
       commentThread.replies.comments.forEach(reply_ => {
         console.log('reply_', reply_);
-        const reply = YouTubeComment.fromReply(reply_, topLevelComment_);
+        const reply = new YouTubeComment(reply_, topLevelComment);
 
         if (isTargetComment(reply)) {
           targets.push(reply);
@@ -54,28 +54,14 @@ function fetchYouTubeComments(from, to) {
 }
 
 class YouTubeComment {
-  static fromTopLevelComment(topLevelComment) {
-    const comment = new YouTubeComment();
-    comment.textOriginal = topLevelComment.snippet.textOriginal;
-    comment.publishedAt = Date.parse(topLevelComment.snippet.publishedAt);
-    comment.updatedAt = Date.parse(topLevelComment.snippet.updatedAt);
-    comment.authorDisplayName = topLevelComment.snippet.authorDisplayName;
-    comment.authorProfileImageUrl = topLevelComment.snippet.authorProfileImageUrl;
-    comment.videoId = topLevelComment.snippet.videoId;
-    comment.parentComment = null;
-    return comment;
-  }
-
-  static fromReply(reply, topLevelComment) {
-    const comment = new YouTubeComment();
-    comment.textOriginal = reply.snippet.textOriginal;
-    comment.publishedAt = Date.parse(reply.snippet.publishedAt);
-    comment.updatedAt = Date.parse(reply.snippet.updatedAt);
-    comment.authorDisplayName = reply.snippet.authorDisplayName;
-    comment.authorProfileImageUrl = reply.snippet.authorProfileImageUrl;
-    comment.videoId = reply.snippet.videoId;
-    comment.parentComment = this.fromTopLevelComment(topLevelComment);
-    return comment;
+  constructor(comment, parentYouTubeComment) {
+    this.textOriginal = comment.snippet.textOriginal;
+    this.publishedAt = Date.parse(comment.snippet.publishedAt);
+    this.updatedAt = Date.parse(comment.snippet.updatedAt);
+    this.authorDisplayName = comment.snippet.authorDisplayName;
+    this.authorProfileImageUrl = comment.snippet.authorProfileImageUrl;
+    this.videoId = comment.snippet.videoId;
+    this.parentComment = parentYouTubeComment;
   }
 
   get isReply() {
