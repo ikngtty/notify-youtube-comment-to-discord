@@ -9,10 +9,7 @@ function main() {
 }
 
 function fetchYouTubeComments(from, to) {
-  const isTargetComment = comment => {
-    const updatedAt = Date.parse(comment.snippet.updatedAt);
-    return from < updatedAt && updatedAt <= to;
-  };
+  const isTargetComment = comment => from < comment.updatedAt && comment.updatedAt <= to;
 
   // TODO: fetch all pages
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
@@ -32,19 +29,23 @@ function fetchYouTubeComments(from, to) {
     });
     console.log('commentThreadsResult', commentThreadsResult);
     commentThreadsResult.items.forEach(commentThread => {
-      const topLevelComment = commentThread.snippet.topLevelComment;
-      console.log('topLevelComment', topLevelComment);
+      const topLevelComment_ = commentThread.snippet.topLevelComment;
+      console.log('topLevelComment_', topLevelComment_);
+      const topLevelComment = YouTubeComment.fromTopLevelComment(topLevelComment_);
+
       if (isTargetComment(topLevelComment)) {
-        targets.push(YouTubeComment.fromTopLevelComment(topLevelComment));
+        targets.push(topLevelComment);
       }
 
       if (!commentThread.replies) {
         return;
       }
-      commentThread.replies.comments.forEach(reply => {
-        console.log('reply', reply);
+      commentThread.replies.comments.forEach(reply_ => {
+        console.log('reply_', reply_);
+        const reply = YouTubeComment.fromReply(reply_, topLevelComment_);
+
         if (isTargetComment(reply)) {
-          targets.push(YouTubeComment.fromReply(reply, topLevelComment));
+          targets.push(reply);
         }
       });
     });
@@ -56,8 +57,8 @@ class YouTubeComment {
   static fromTopLevelComment(topLevelComment) {
     const comment = new YouTubeComment();
     comment.textOriginal = topLevelComment.snippet.textOriginal;
-    comment.publishedAt = topLevelComment.snippet.publishedAt;
-    comment.updatedAt = topLevelComment.snippet.updatedAt;
+    comment.publishedAt = Date.parse(topLevelComment.snippet.publishedAt);
+    comment.updatedAt = Date.parse(topLevelComment.snippet.updatedAt);
     comment.authorDisplayName = topLevelComment.snippet.authorDisplayName;
     comment.authorProfileImageUrl = topLevelComment.snippet.authorProfileImageUrl;
     comment.videoId = topLevelComment.snippet.videoId;
@@ -68,8 +69,8 @@ class YouTubeComment {
   static fromReply(reply, topLevelComment) {
     const comment = new YouTubeComment();
     comment.textOriginal = reply.snippet.textOriginal;
-    comment.publishedAt = reply.snippet.publishedAt;
-    comment.updatedAt = reply.snippet.updatedAt;
+    comment.publishedAt = Date.parse(reply.snippet.publishedAt);
+    comment.updatedAt = Date.parse(reply.snippet.updatedAt);
     comment.authorDisplayName = reply.snippet.authorDisplayName;
     comment.authorProfileImageUrl = reply.snippet.authorProfileImageUrl;
     comment.videoId = reply.snippet.videoId;
