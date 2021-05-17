@@ -6,8 +6,12 @@ function setProperties() {
   });
 }
 
-// for debug
 function getProperties() {
   const properties = ps.getProperties();
   console.log(properties);
+}
+
+// need to fill value in code directly
+function deleteProperty() {
+  ps.deleteProperty('*****');
 }
