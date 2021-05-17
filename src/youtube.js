@@ -7,11 +7,11 @@ function fetchYouTubeComments(from, to) {
     maxResults: 50,
     playlistId: ps.getProperty('YOUTUBE_PLAYLIST_ID'),
   });
-  console.log('playlistItemsResult', playlistItemsResult);
+  console.log('playlistItemsResult:', playlistItemsResult);
 
   const targets = [];
   playlistItemsResult.items.forEach(playlistItem => {
-    console.log('playlistItem', playlistItem);
+    console.log('playlistItem:', playlistItem);
     const video = YouTubeVideo.fromPlaylistItem(playlistItem);
 
     // TODO: fetch all pages
@@ -19,10 +19,10 @@ function fetchYouTubeComments(from, to) {
       maxResults: 100,
       videoId: video.id,
     });
-    console.log('commentThreadsResult', commentThreadsResult);
+    console.log('commentThreadsResult:', commentThreadsResult);
     commentThreadsResult.items.forEach(commentThread => {
       const topLevelComment_ = commentThread.snippet.topLevelComment;
-      console.log('topLevelComment_', topLevelComment_);
+      console.log('topLevelComment_:', topLevelComment_);
       const topLevelComment = new YouTubeComment(video, topLevelComment_, null);
 
       if (isTargetComment(topLevelComment)) {
@@ -33,7 +33,7 @@ function fetchYouTubeComments(from, to) {
         return;
       }
       commentThread.replies.comments.forEach(reply_ => {
-        console.log('reply_', reply_);
+        console.log('reply_:', reply_);
         const reply = new YouTubeComment(video, reply_, topLevelComment);
 
         if (isTargetComment(reply)) {

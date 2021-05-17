@@ -22,7 +22,7 @@ function main() {
   const checkedAt = new Date();
   const comments = fetchYouTubeComments(lastCheckedAt, checkedAt);
   comments.forEach(comment => {
-    console.info('fetched comment', comment);
+    console.info('fetched comment:', comment);
   });
   ps.setProperty('LAST_CHECKED_AT', checkedAt.toISOString());
 }
