@@ -1,7 +1,7 @@
 // need to fill values in code directly and run once to initialize this project
 function setProperties() {
   ps.setProperties({
-    PLAYLIST_ID: '*****',
+    YOUTUBE_PLAYLIST_ID: '*****',
     LAST_CHECKED_AT: '2020-01-01T00:00:00Z', // ISO8601
   });
 }

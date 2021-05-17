@@ -5,7 +5,7 @@ function fetchYouTubeComments(from, to) {
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
     // fields: 'items(contentDetails(videoId),snippet(title))',
     maxResults: 50,
-    playlistId: ps.getProperty('PLAYLIST_ID'),
+    playlistId: ps.getProperty('YOUTUBE_PLAYLIST_ID'),
   });
   console.log('playlistItemsResult', playlistItemsResult);
 
