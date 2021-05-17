@@ -62,8 +62,8 @@ class YouTubeComment {
   constructor(youTubeVideo, comment, parentYouTubeComment) {
     this.video = youTubeVideo;
     this.textOriginal = comment.snippet.textOriginal;
-    this.publishedAt = Date.parse(comment.snippet.publishedAt);
-    this.updatedAt = Date.parse(comment.snippet.updatedAt);
+    this.publishedAt = new Date(comment.snippet.publishedAt);
+    this.updatedAt = new Date(comment.snippet.updatedAt);
     this.authorDisplayName = comment.snippet.authorDisplayName;
     this.authorProfileImageUrl = comment.snippet.authorProfileImageUrl;
     this.parentComment = parentYouTubeComment;
