@@ -3,6 +3,7 @@
 function setProperties() {
   ps.setProperties({
     YOUTUBE_PLAYLIST_ID: '*****',
+    DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/*****/*****',
     LAST_CHECKED_AT: '2020-01-01T00:00:00Z', // ISO8601
   });
 }
