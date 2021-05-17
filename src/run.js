@@ -1,4 +1,5 @@
-// need to fill values in code directly and run once to initialize this project
+// Need to fill values in code directly.
+// Need to run to initialize this project.
 function setProperties() {
   ps.setProperties({
     YOUTUBE_PLAYLIST_ID: '*****',
@@ -11,7 +12,7 @@ function getProperties() {
   console.log(properties);
 }
 
-// need to fill value in code directly
+// Need to fill the value in code directly.
 function deleteProperty() {
   ps.deleteProperty('*****');
 }
