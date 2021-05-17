@@ -54,7 +54,7 @@ class YouTubeVideo {
   }
 
   get url() {
-    return `https://www.youtube.com/watch?v=${this.videoId}`;
+    return `https://www.youtube.com/watch?v=${this.id}`;
   }
 }
 
