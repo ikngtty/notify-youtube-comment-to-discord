@@ -1,4 +1,6 @@
 function notifyToDiscord(youtubeComments) {
+  youtubeComments.sort((a, b) => a.updatedAt - b.updatedAt);
+
   const url = ps.getProperty('DISCORD_WEBHOOK_URL');
   youtubeComments.forEach(comment => {
     console.log('youtube comment to notify:', comment);
@@ -29,5 +31,8 @@ function notifyToDiscord(youtubeComments) {
     console.log('response code:', response.getResponseCode());
     // console.log('response header:', response.getAllHeaders());
     console.log('response text:', response.getContentText());
+
+    ps.setProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP', comment.updatedAt.toISOString());
+    // HACK: If there are videos which have the same timestamp, and notifying the first succeeds and notifying the second fails, the second video is not notified forever.
   });
 }

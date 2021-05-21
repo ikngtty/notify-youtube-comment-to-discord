@@ -4,7 +4,7 @@ function setProperties() {
   ps.setProperties({
     YOUTUBE_PLAYLIST_ID: '*****',
     DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/*****/*****',
-    LAST_CHECKED_AT: '2020-01-01T00:00:00Z', // ISO8601
+    LAST_NOTIFIED_COMMENT_TIMESTAMP: '2020-01-01T00:00:00Z', // ISO8601
   });
 }
 
@@ -19,9 +19,8 @@ function deleteProperty() {
 }
 
 function main() {
-  const lastCheckedAt = new Date(ps.getProperty('LAST_CHECKED_AT'));
-  const checkedAt = new Date();
-  const comments = fetchYouTubeComments(lastCheckedAt, checkedAt);
+  const lastNotifiedCommentTimestamp = new Date(ps.getProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP'));
+  const now = new Date();
+  const comments = fetchYouTubeComments(lastNotifiedCommentTimestamp, now);
   notifyToDiscord(comments);
-  ps.setProperty('LAST_CHECKED_AT', checkedAt.toISOString());
 }
