@@ -1,6 +1,8 @@
 function notifyToDiscord(youtubeComments) {
   const url = ps.getProperty('DISCORD_WEBHOOK_URL');
   youtubeComments.forEach(comment => {
+    console.log('youtube comment to notify:', comment);
+
     const payload = {
       username: 'つべコメ更新通知bot',
       // avatar_url: '', // TODO:
