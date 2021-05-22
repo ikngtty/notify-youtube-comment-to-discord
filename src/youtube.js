@@ -9,6 +9,8 @@ function fetchYouTubeComments(updatedAfter, updatedBefore) {
   });
   console.log('playlistItemsResult:', playlistItemsResult);
 
+  // TODO: fetch for only last N videos
+  // We should compute N not to be over YouTube API Quota limit.
   const targets = [];
   playlistItemsResult.items.forEach(playlistItem => {
     console.log('playlistItem:', playlistItem);
