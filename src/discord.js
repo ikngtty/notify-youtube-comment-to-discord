@@ -1,7 +1,7 @@
 function notifyToDiscord(youtubeComments) {
-  youtubeComments.sort((a, b) => a.updatedAt - b.updatedAt);
-
   const url = ps.getProperty('DISCORD_WEBHOOK_URL');
+
+  youtubeComments.sort((a, b) => a.updatedAt - b.updatedAt);
   youtubeComments.forEach(comment => {
     console.log('youtube comment to notify:', comment);
 
