@@ -5,22 +5,11 @@ function notifyToDiscord(youtubeComments) {
   youtubeComments.forEach(comment => {
     console.log('youtube comment to notify:', comment);
 
+    const embed = createEmbedForYouTubeComment(comment);
     const payload = {
       username: 'つべコメ更新通知bot',
       // avatar_url: '', // TODO:
-      embeds: [
-        {
-          // TODO: show whether it is reply or not
-          title: comment.video.title,
-          description: comment.textOriginal,
-          url: comment.video.url,
-          timestamp: comment.updatedAt.toISOString(),
-          author: {
-            name: comment.authorDisplayName,
-            icon_url: comment.authorProfileImageUrl,
-          },
-        },
-      ],
+      embeds: [embed], // TODO: 10 embeds
     };
     const response = UrlFetchApp.fetch(url, {
       contentType: 'application/json',
@@ -35,4 +24,18 @@ function notifyToDiscord(youtubeComments) {
     ps.setProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP', comment.updatedAt.toISOString());
     // HACK: If there are videos which have the same timestamp, and notifying the first succeeds and notifying the second fails, the second video is not notified forever.
   });
+}
+
+function createEmbedForYouTubeComment(youtubeComment) {
+  return {
+    // TODO: show whether it is reply or not
+    title: youtubeComment.video.title,
+    description: youtubeComment.textOriginal,
+    url: youtubeComment.video.url,
+    timestamp: youtubeComment.updatedAt.toISOString(),
+    author: {
+      name: youtubeComment.authorDisplayName,
+      icon_url: youtubeComment.authorProfileImageUrl,
+    },
+  };
 }
