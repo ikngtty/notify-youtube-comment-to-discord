@@ -21,6 +21,13 @@ function deleteProperty() {
 function main() {
   const lastNotifiedCommentTimestamp = new Date(ps.getProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP'));
   const now = new Date();
-  const comments = fetchYouTubeComments(lastNotifiedCommentTimestamp, now);
+
+  const comments = [];
+  eachYouTubeComment(comment => {
+    if (lastNotifiedCommentTimestamp < comment.updatedAt && comment.updatedAt <= now) {
+      comments.push(comment);
+    }
+  });
+
   notifyToDiscord(comments);
 }

@@ -1,6 +1,5 @@
-function fetchYouTubeComments(updatedSince, updatedUntil) {
-  const isTargetComment = comment => updatedSince < comment.updatedAt && comment.updatedAt <= updatedUntil;
-
+// NOTE: generator functions are more suitable but it cannot be used in GAS
+function eachYouTubeComment(callback) {
   // TODO: fetch all pages
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
     // fields: 'items(contentDetails(videoId),snippet(title))',
@@ -11,7 +10,6 @@ function fetchYouTubeComments(updatedSince, updatedUntil) {
 
   // TODO: fetch for only last N videos
   // We should compute N not to be over YouTube API Quota limit.
-  const targets = [];
   playlistItemsResult.items.forEach(playlistItem => {
     console.log('playlistItem:', playlistItem);
     const video = YouTubeVideo.fromPlaylistItem(playlistItem);
@@ -26,10 +24,7 @@ function fetchYouTubeComments(updatedSince, updatedUntil) {
       const topLevelComment_ = commentThread.snippet.topLevelComment;
       console.log('topLevelComment_:', topLevelComment_);
       const topLevelComment = new YouTubeComment(video, topLevelComment_, null);
-
-      if (isTargetComment(topLevelComment)) {
-        targets.push(topLevelComment);
-      }
+      callback(topLevelComment);
 
       if (!commentThread.replies) {
         return;
@@ -37,14 +32,10 @@ function fetchYouTubeComments(updatedSince, updatedUntil) {
       commentThread.replies.comments.forEach(reply_ => {
         console.log('reply_:', reply_);
         const reply = new YouTubeComment(video, reply_, topLevelComment);
-
-        if (isTargetComment(reply)) {
-          targets.push(reply);
-        }
+        callback(reply);
       });
     });
   });
-  return targets;
 }
 
 class YouTubeVideo {
