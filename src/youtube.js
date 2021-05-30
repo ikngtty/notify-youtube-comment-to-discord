@@ -1,5 +1,5 @@
-function fetchYouTubeComments(updatedAfter, updatedBefore) {
-  const isTargetComment = comment => updatedAfter < comment.updatedAt && comment.updatedAt <= updatedBefore;
+function fetchYouTubeComments(updatedSince, updatedUntil) {
+  const isTargetComment = comment => updatedSince < comment.updatedAt && comment.updatedAt <= updatedUntil;
 
   // TODO: fetch all pages
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
