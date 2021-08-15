@@ -54,12 +54,17 @@ class YouTubeVideo {
 class YouTubeComment {
   constructor(youTubeVideo, comment, parentYouTubeComment) {
     this.video = youTubeVideo;
+    this.id = comment.id
     this.textOriginal = comment.snippet.textOriginal;
     this.publishedAt = new Date(comment.snippet.publishedAt);
     this.updatedAt = new Date(comment.snippet.updatedAt);
     this.authorDisplayName = comment.snippet.authorDisplayName;
     this.authorProfileImageUrl = comment.snippet.authorProfileImageUrl;
     this.parentComment = parentYouTubeComment;
+  }
+
+  get url() {
+    return `https://www.youtube.com/watch?v=${this.video.id}&lc=${this.id}`;
   }
 
   get isReply() {
