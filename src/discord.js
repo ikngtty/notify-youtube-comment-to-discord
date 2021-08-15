@@ -2,14 +2,13 @@ function notifyToDiscord(youtubeComments) {
   const url = ps.getProperty('DISCORD_WEBHOOK_URL');
 
   youtubeComments.sort((a, b) => a.updatedAt - b.updatedAt);
-  youtubeComments.forEach(comment => {
-    console.log('youtube comment to notify:', comment);
+  youtubeComments.eachSlice(10, comments => {
+    console.log('youtube comments to notify:', comments);
 
-    const embed = createEmbedForYouTubeComment(comment);
     const payload = {
       username: 'つべコメ更新通知bot',
       // avatar_url: '', // TODO:
-      embeds: [embed], // TODO: 10 embeds
+      embeds: comments.map(createEmbedForYouTubeComment),
     };
     const response = UrlFetchApp.fetch(url, {
       contentType: 'application/json',
@@ -21,7 +20,7 @@ function notifyToDiscord(youtubeComments) {
     // console.log('response header:', response.getAllHeaders());
     console.log('response text:', response.getContentText());
 
-    ps.setProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP', comment.updatedAt.toISOString());
+    ps.setProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP', comments.last().updatedAt.toISOString());
     // HACK: If there are videos which have the same timestamp, and notifying the first succeeds and notifying the second fails, the second video is not notified forever.
   });
 }
