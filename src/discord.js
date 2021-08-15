@@ -27,15 +27,25 @@ function notifyToDiscord(youtubeComments) {
 }
 
 function createEmbedForYouTubeComment(youtubeComment) {
+  videoTitle = youtubeComment.video.title
+  videoUrl = youtubeComment.video.url
   return {
     // TODO: show whether it is reply or not
-    title: youtubeComment.video.title,
-    description: youtubeComment.textOriginal,
-    url: youtubeComment.video.url,
+    title: `A new comment!`,
     timestamp: youtubeComment.updatedAt.toISOString(),
     author: {
       name: youtubeComment.authorDisplayName,
       icon_url: youtubeComment.authorProfileImageUrl,
     },
+    fields: [
+      {
+        name: "video:",
+        value: `${videoTitle}( ${videoUrl} )`,
+      },
+      {
+        name: "comment:",
+        value: youtubeComment.textOriginal,
+      },
+    ],
   };
 }
