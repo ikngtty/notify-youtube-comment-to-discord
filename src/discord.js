@@ -26,8 +26,15 @@ function notifyToDiscord(youtubeComments) {
 }
 
 function createEmbedForYouTubeComment(youtubeComment) {
+  fields = [];
+  if (youtubeComment.isReply) {
+    parent = youtubeComment.parentComment;
+    fields.push({
+      name: 'reply to:',
+      value: `${parent.authorDisplayName} : ${parent.textOriginal}`,
+    });
+  }
   return {
-    // TODO: show whether it is reply or not
     title: `A new comment to "${youtubeComment.video.title}"`,
     description: youtubeComment.textOriginal,
     url: youtubeComment.url,
@@ -36,5 +43,6 @@ function createEmbedForYouTubeComment(youtubeComment) {
       name: youtubeComment.authorDisplayName,
       icon_url: youtubeComment.authorProfileImageUrl,
     },
+    fields: fields,
   };
 }
