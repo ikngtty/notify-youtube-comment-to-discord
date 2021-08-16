@@ -1,5 +1,4 @@
-// NOTE: generator functions are more suitable but it cannot be used in GAS
-function eachYouTubeComment(callback) {
+function* youTubeCommentsOfThePlaylist() {
   // TODO: fetch all pages
   const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
     // fields: 'items(contentDetails(videoId),snippet(title))',
@@ -10,7 +9,7 @@ function eachYouTubeComment(callback) {
 
   // TODO: fetch for only last N videos
   // We should compute N not to be over YouTube API Quota limit.
-  playlistItemsResult.items.forEach(playlistItem => {
+  for (const playlistItem of playlistItemsResult.items) {
     console.log('playlistItem:', playlistItem);
     const video = YouTubeVideo.fromPlaylistItem(playlistItem);
 
@@ -20,22 +19,22 @@ function eachYouTubeComment(callback) {
       videoId: video.id,
     });
     console.log('commentThreadsResult:', commentThreadsResult);
-    commentThreadsResult.items.forEach(commentThread => {
+    for (const commentThread of commentThreadsResult.items) {
       const topLevelComment_ = commentThread.snippet.topLevelComment;
       console.log('topLevelComment_:', topLevelComment_);
       const topLevelComment = new YouTubeComment(video, topLevelComment_, null);
-      callback(topLevelComment);
+      yield topLevelComment;
 
       if (!commentThread.replies) {
-        return;
+        continue;
       }
-      commentThread.replies.comments.forEach(reply_ => {
+      for (const reply_ of commentThread.replies.comments) {
         console.log('reply_:', reply_);
         const reply = new YouTubeComment(video, reply_, topLevelComment);
-        callback(reply);
-      });
-    });
-  });
+        yield reply;
+      }
+    }
+  }
 }
 
 class YouTubeVideo {
