@@ -1,4 +1,9 @@
-const discord = {
+try {
+  App;
+} catch {
+  App = {};
+}
+App.Discord = {
   notify: function (youtubeComments) {
     const url = ps.getProperty('DISCORD_WEBHOOK_URL');
 
@@ -9,7 +14,7 @@ const discord = {
       const payload = {
         username: 'つべコメ更新通知bot',
         // avatar_url: '', // TODO:
-        embeds: comments.map(discord._createEmbedForYouTubeComment),
+        embeds: comments.map(App.Discord._createEmbedForYouTubeComment),
       };
       const response = UrlFetchApp.fetch(url, {
         contentType: 'application/json',

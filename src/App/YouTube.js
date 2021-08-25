@@ -1,4 +1,9 @@
-const youtube = {
+try {
+  App;
+} catch {
+  App = {};
+}
+App.YouTube = {
   getCommentsOfThePlaylist: function* () {
     // TODO: fetch all pages
     const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
@@ -12,7 +17,7 @@ const youtube = {
     // We should compute N not to be over YouTube API Quota limit.
     for (const playlistItem of playlistItemsResult.items) {
       console.log('playlistItem:', playlistItem);
-      const video = youtube.Video.fromPlaylistItem(playlistItem);
+      const video = App.YouTube.Video.fromPlaylistItem(playlistItem);
 
       // TODO: fetch all pages
       const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
@@ -23,7 +28,7 @@ const youtube = {
       for (const commentThread of commentThreadsResult.items) {
         const topLevelComment_ = commentThread.snippet.topLevelComment;
         console.log('topLevelComment_:', topLevelComment_);
-        const topLevelComment = new youtube.Comment(video, topLevelComment_, null);
+        const topLevelComment = new App.YouTube.Comment(video, topLevelComment_, null);
         yield topLevelComment;
 
         if (!commentThread.replies) {
@@ -31,7 +36,7 @@ const youtube = {
         }
         for (const reply_ of commentThread.replies.comments) {
           console.log('reply_:', reply_);
-          const reply = new youtube.Comment(video, reply_, topLevelComment);
+          const reply = new App.YouTube.Comment(video, reply_, topLevelComment);
           yield reply;
         }
       }
@@ -40,7 +45,7 @@ const youtube = {
 
   Video: class {
     static fromPlaylistItem(playlistItem) {
-      const video = new youtube.Video();
+      const video = new App.YouTube.Video();
       video.id = playlistItem.contentDetails.videoId;
       video.title = playlistItem.snippet.title;
       return video;
