@@ -22,11 +22,11 @@ function main() {
   const now = new Date();
 
   const comments = [];
-  for (const comment of youTubeCommentsOfThePlaylist()) {
+  for (const comment of youtube.getCommentsOfThePlaylist()) {
     if (lastNotifiedCommentTimestamp < comment.updatedAt && comment.updatedAt <= now) {
       comments.push(comment);
     }
   }
 
-  notifyToDiscord(comments);
+  discord.notify(comments);
 }
