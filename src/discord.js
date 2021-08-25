@@ -8,7 +8,7 @@ function notifyToDiscord(youtubeComments) {
     const payload = {
       username: 'つべコメ更新通知bot',
       // avatar_url: '', // TODO:
-      embeds: comments.map(createEmbedForYouTubeComment),
+      embeds: comments.map(_createEmbedForYouTubeComment),
     };
     const response = UrlFetchApp.fetch(url, {
       contentType: 'application/json',
@@ -25,7 +25,7 @@ function notifyToDiscord(youtubeComments) {
   });
 }
 
-function createEmbedForYouTubeComment(youtubeComment) {
+function _createEmbedForYouTubeComment(youtubeComment) {
   fields = [];
   if (youtubeComment.isReply) {
     parent = youtubeComment.parentComment;
