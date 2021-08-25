@@ -1,11 +1,6 @@
 // Need to fill values in code directly.
-// Need to run to initialize this project.
-function setProperties() {
-  ps.setProperties({
-    YOUTUBE_PLAYLIST_ID: '*****',
-    DISCORD_WEBHOOK_URL: 'https://discord.com/api/webhooks/*****/*****',
-    LAST_NOTIFIED_COMMENT_TIMESTAMP: '2020-01-01T00:00:00Z', // ISO8601
-  });
+function setProperty() {
+  ps.setProperty('---KEY---', '---VALUE---');
 }
 
 function getProperties() {
@@ -15,7 +10,11 @@ function getProperties() {
 
 // Need to fill the value in code directly.
 function deleteProperty() {
-  ps.deleteProperty('*****');
+  ps.deleteProperty('---KEY---');
+}
+
+function initLastNotifiedCommentTimestamp() {
+  ps.setProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP', '2000-01-01T00:00:00Z'); // before youtube is founded
 }
 
 function main() {
