@@ -1,6 +1,4 @@
-try {
-  App;
-} catch {
+if (!App) {
   App = {};
 }
 App.Discord = {
