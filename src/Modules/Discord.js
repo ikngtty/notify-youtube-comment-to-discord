@@ -14,7 +14,7 @@ Modules.Discord = {
       const payload = {
         username: 'つべコメ更新通知bot',
         // avatar_url: '', // TODO:
-        embeds: comments.map(Modules.Discord._createEmbedForYouTubeComment),
+        embeds: comments.map(this._createEmbedForYouTubeComment),
       };
       const response = UrlFetchApp.fetch(url, {
         contentType: 'application/json',

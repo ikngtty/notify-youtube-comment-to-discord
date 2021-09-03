@@ -17,7 +17,7 @@ Modules.YouTube = {
     // We should compute N not to be over YouTube API Quota limit.
     for (const playlistItem of playlistItemsResult.items) {
       console.log('playlistItem:', playlistItem);
-      const video = Modules.YouTube.Video.fromPlaylistItem(playlistItem);
+      const video = this.Video.fromPlaylistItem(playlistItem);
 
       // TODO: fetch all pages
       const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
@@ -28,7 +28,7 @@ Modules.YouTube = {
       for (const commentThread of commentThreadsResult.items) {
         const topLevelComment_ = commentThread.snippet.topLevelComment;
         console.log('topLevelComment_:', topLevelComment_);
-        const topLevelComment = new Modules.YouTube.Comment(video, topLevelComment_, null);
+        const topLevelComment = new this.Comment(video, topLevelComment_, null);
         yield topLevelComment;
 
         if (!commentThread.replies) {
@@ -36,7 +36,7 @@ Modules.YouTube = {
         }
         for (const reply_ of commentThread.replies.comments) {
           console.log('reply_:', reply_);
-          const reply = new Modules.YouTube.Comment(video, reply_, topLevelComment);
+          const reply = new this.Comment(video, reply_, topLevelComment);
           yield reply;
         }
       }
