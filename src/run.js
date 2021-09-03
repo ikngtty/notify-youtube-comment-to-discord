@@ -27,6 +27,7 @@ function main() {
       comments.push(comment);
     }
   }
+  console.info('final estimate of quota consumption:', Modules.YouTube.quotaConsumption);
 
   Modules.Discord.notify(comments);
 }

@@ -4,8 +4,15 @@ try {
   Modules = {};
 }
 Modules.YouTube = {
+  // NOTE: The quota is basically 10,000 units per day.
+  // If this script runs every 5 minutes, it should not consume the quota over
+  // ((10,000 / 24) / 60) * 5 = 34.7... units every run.
+  quotaConsumption: 0,
+
   getCommentsOfThePlaylist: function* () {
     // TODO: fetch all pages
+    this.quotaConsumption += 1;
+    console.log('estimate of quota consumption:', this.quotaConsumption);
     const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
       // fields: 'items(contentDetails(videoId),snippet(title))',
       maxResults: 50,
@@ -20,6 +27,8 @@ Modules.YouTube = {
       const video = this.Video.fromPlaylistItem(playlistItem);
 
       // TODO: fetch all pages
+      this.quotaConsumption += 1;
+      console.log('estimate of quota consumption:', this.quotaConsumption);
       const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
         maxResults: 100,
         videoId: video.id,

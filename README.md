@@ -19,3 +19,4 @@ A Google Apps Script project to notify YouTube comment to Discord.
 ## Note
 
 This script uses YouTube API, so it consumes an API quota.
+Let's check the execution log that shows an estimate of quota consumption.
