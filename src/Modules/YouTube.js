@@ -10,6 +10,15 @@ Modules.YouTube = {
   quotaConsumption: 0,
 
   getCommentsOfThePlaylist: function* () {
+    // TODO: fetch for only last N videos
+    // We should compute N not to be over YouTube API Quota limit.
+    for (const playlistItem of this.getItemsOfThePlaylist()) {
+      const video = this.Video.fromPlaylistItem(playlistItem);
+      yield* this.getCommentsOfVideo(video);
+    }
+  },
+
+  getItemsOfThePlaylist: function* () {
     // TODO: fetch all pages
     this.quotaConsumption += 1;
     console.log('estimate of quota consumption:', this.quotaConsumption);
@@ -20,34 +29,35 @@ Modules.YouTube = {
     });
     console.log('playlistItemsResult:', playlistItemsResult);
 
-    // TODO: fetch for only last N videos
-    // We should compute N not to be over YouTube API Quota limit.
     for (const playlistItem of playlistItemsResult.items) {
       console.log('playlistItem:', playlistItem);
-      const video = this.Video.fromPlaylistItem(playlistItem);
+      yield playlistItem;
+    }
+  },
 
-      // TODO: fetch all pages
-      this.quotaConsumption += 1;
-      console.log('estimate of quota consumption:', this.quotaConsumption);
-      const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
-        maxResults: 100, // NOTE: Acceptable values are 1 to 100, inclusive. The default value is 20.
-        videoId: video.id,
-      });
-      console.log('commentThreadsResult:', commentThreadsResult);
-      for (const commentThread of commentThreadsResult.items) {
-        const topLevelComment_ = commentThread.snippet.topLevelComment;
-        console.log('topLevelComment_:', topLevelComment_);
-        const topLevelComment = new this.Comment(video, topLevelComment_, null);
-        yield topLevelComment;
+  getCommentsOfVideo: function* (video) {
+    // TODO: fetch all pages
+    this.quotaConsumption += 1;
+    console.log('estimate of quota consumption:', this.quotaConsumption);
+    const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
+      maxResults: 100, // NOTE: Acceptable values are 1 to 100, inclusive. The default value is 20.
+      videoId: video.id,
+    });
+    console.log('commentThreadsResult:', commentThreadsResult);
 
-        if (!commentThread.replies) {
-          continue;
-        }
-        for (const reply_ of commentThread.replies.comments) {
-          console.log('reply_:', reply_);
-          const reply = new this.Comment(video, reply_, topLevelComment);
-          yield reply;
-        }
+    for (const commentThread of commentThreadsResult.items) {
+      const topLevelComment_ = commentThread.snippet.topLevelComment;
+      console.log('topLevelComment_:', topLevelComment_);
+      const topLevelComment = new this.Comment(video, topLevelComment_, null);
+      yield topLevelComment;
+
+      if (!commentThread.replies) {
+        continue;
+      }
+      for (const reply_ of commentThread.replies.comments) {
+        console.log('reply_:', reply_);
+        const reply = new this.Comment(video, reply_, topLevelComment);
+        yield reply;
       }
     }
   },
