@@ -25,6 +25,12 @@ Modules.Iterable = class {
     return new Modules.Iterable(gen());
   }
 
+  lastN(n) {
+    // HACK: This implementation, which stores all iterated items in an array,
+    // may use a lot of memory space.
+    return this.toArray().slice(-1 * n);
+  }
+
   toArray() {
     return [...this._contents];
   }
