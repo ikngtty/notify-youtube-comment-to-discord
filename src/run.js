@@ -21,13 +21,14 @@ function main() {
   const lastNotifiedCommentTimestamp = new Date(ps.getProperty('LAST_NOTIFIED_COMMENT_TIMESTAMP'));
   const now = new Date();
 
-  const comments = [];
-  for (const comment of Modules.YouTube.getCommentsOfThePlaylist()) {
-    if (lastNotifiedCommentTimestamp < comment.updatedAt && comment.updatedAt <= now) {
-      comments.push(comment);
-    }
-  }
+  const allComments = new Modules.Iterable(Modules.YouTube.getCommentsOfThePlaylist());
+  const commentsToNotify = allComments.filter(
+    comment =>
+      lastNotifiedCommentTimestamp < comment.updatedAt
+      && comment.updatedAt <= now
+  ).toArray();
+
   console.info('final estimate of quota consumption:', Modules.YouTube.quotaConsumption);
 
-  Modules.Discord.notify(comments);
+  Modules.Discord.notify(commentsToNotify);
 }
