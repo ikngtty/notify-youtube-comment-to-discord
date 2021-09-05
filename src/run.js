@@ -32,3 +32,48 @@ function main() {
 
   Modules.Discord.notify(commentsToNotify);
 }
+
+function _benchmarkSizedQueue(SizedQueue) {
+  const objects = [];
+  for (let i = 0; i < 100000; i++) {
+    const obj = { index: i };
+    for (let iProp = 0; iProp < 100; iProp++) {
+      obj[`prop${iProp}`] = iProp;
+    }
+    objects.push(obj);
+  }
+
+  const resultTimes = [];
+  for (let i = 0; i < 10; i++) {
+    const startTime = new Date();
+    const sized = new SizedQueue(20);
+    for (const obj of objects) {
+      sized.push(obj);
+    }
+    sized.toArray();
+    const endTime = new Date();
+    resultTimes.push(endTime - startTime);
+  }
+
+  let resultTotal = 0;
+  for (const time of resultTimes) {
+    resultTotal += time;
+  }
+  const resultAverage = resultTotal / resultTimes.length;
+  console.info('resultTimes:', resultTimes);
+  console.info('resultAverage:', resultAverage);
+}
+
+function benchmarkSizedArray() {
+  _benchmarkSizedQueue(Modules.SizedArray);
+  // Outputs:
+  //   resultTimes: [ 14, 22, 19, 5, 4, 4, 4, 4, 5, 6 ]
+  //   resultAverage: 8.7
+}
+
+function benchmarkSizedList() {
+  _benchmarkSizedQueue(Modules.SizedList);
+  // Outputs:
+  //   resultTimes: [ 30, 23, 22, 2, 1, 3, 2, 2, 1, 2 ]
+  //   resultAverage: 8.8
+}
