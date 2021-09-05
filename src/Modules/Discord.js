@@ -4,7 +4,7 @@ try {
   Modules = {};
 }
 Modules.Discord = {
-  notify: function (youtubeComments) {
+  notify(youtubeComments) {
     const url = ps.getProperty('DISCORD_WEBHOOK_URL');
 
     youtubeComments.sort((a, b) => a.updatedAt - b.updatedAt);
@@ -31,7 +31,7 @@ Modules.Discord = {
     });
   },
 
-  _createEmbedForYouTubeComment: function (youtubeComment) {
+  _createEmbedForYouTubeComment(youtubeComment) {
     fields = [];
     if (youtubeComment.isReply) {
       parent = youtubeComment.parentComment;

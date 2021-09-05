@@ -9,7 +9,7 @@ Modules.YouTube = {
   // ((10,000 / 24) / 60) * 5 = 34.7... units every run.
   quotaConsumption: 0,
 
-  getCommentsOfThePlaylist: function* () {
+  *getCommentsOfThePlaylist() {
     // TODO: fetch for only last N videos
     // We should compute N not to be over YouTube API Quota limit.
     for (const playlistItem of this.getItemsOfThePlaylist()) {
@@ -18,7 +18,7 @@ Modules.YouTube = {
     }
   },
 
-  getItemsOfThePlaylist: function* () {
+  *getItemsOfThePlaylist() {
     let nextPageToken = '';
     do {
       this.quotaConsumption += 1;
@@ -40,7 +40,7 @@ Modules.YouTube = {
     } while (nextPageToken);
   },
 
-  getCommentsOfVideo: function* (video) {
+  *getCommentsOfVideo(video) {
     let nextPageToken = '';
     do {
       this.quotaConsumption += 1;
