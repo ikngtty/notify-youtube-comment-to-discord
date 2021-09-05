@@ -26,9 +26,14 @@ Modules.Iterable = class {
   }
 
   lastN(n) {
-    // HACK: This implementation, which stores all iterated items in an array,
-    // may use a lot of memory space.
-    return this.toArray().slice(-1 * n);
+    const items = [];
+    for (const item of this._contents) {
+      items.push(item);
+      if (items.length > n) {
+        items.shift();
+      }
+    }
+    return items;
   }
 
   toArray() {
