@@ -13,7 +13,7 @@ Modules.YouTube = {
     const playlistItems = new Modules.Iterable(this.getItemsOfThePlaylist());
     // NOTE: reduce the number of target videos to reduce consumption of
     // YouTube API Quota
-    for (const playlistItem of playlistItems.lastN(20)) {
+    for (const playlistItem of playlistItems.take(20)) {
       const video = this.Video.fromPlaylistItem(playlistItem);
       yield* this.getCommentsOfVideo(video);
     }
