@@ -25,7 +25,7 @@ Modules.YouTube = {
       this.quotaConsumption += 1;
       console.log('estimate of quota consumption:', this.quotaConsumption);
       const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
-        // fields: 'items(contentDetails(videoId),snippet(title))',
+        fields: 'items(contentDetails/videoId,snippet/title),nextPageToken,pageInfo',
         maxResults: 50, // NOTE: Acceptable values are 0 to 50, inclusive. The default value is 5.
         pageToken: nextPageToken,
         playlistId: ps.getProperty('YOUTUBE_PLAYLIST_ID'),
@@ -46,7 +46,15 @@ Modules.YouTube = {
     do {
       this.quotaConsumption += 1;
       console.log('estimate of quota consumption:', this.quotaConsumption);
+      const commentFields = 'id,snippet(' +
+        'textOriginal,publishedAt,updatedAt' +
+        ',authorDisplayName,authorProfileImageUrl' +
+        ')';
       const commentThreadsResult = YouTube.CommentThreads.list('snippet,replies', {
+        fields: 'items(' +
+          `snippet/topLevelComment(${commentFields})` +
+          `,replies/comments(${commentFields})` +
+          '),nextPageToken,pageInfo',
         maxResults: 100, // NOTE: Acceptable values are 1 to 100, inclusive. The default value is 20.
         pageToken: nextPageToken,
         videoId: video.id,
