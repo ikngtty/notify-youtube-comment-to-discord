@@ -34,12 +34,20 @@ Modules.Discord = {
   _createEmbedForYouTubeComment(youtubeComment) {
     const fields = [];
     if (youtubeComment.isReply) {
-      const parent = youtubeComment.parentComment;
+      const author = youtubeComment.parentComment.authorDisplayName
+
+      const text = youtubeComment.parentComment.textOriginal
+      const TEXT_MAX_LENGTH = 40
+      const textWithEllipsis = text.length > TEXT_MAX_LENGTH ?
+        text.slice(0, TEXT_MAX_LENGTH) + '...' :
+        text
+
       fields.push({
         name: 'reply to:',
-        value: `${parent.authorDisplayName} : ${parent.textOriginal}`,
+        value: `${author} : ${textWithEllipsis}`,
       });
     }
+
     return {
       title: `A new comment to "${youtubeComment.video.title}"`,
       description: youtubeComment.textOriginal,
