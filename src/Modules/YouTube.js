@@ -24,8 +24,8 @@ Modules.YouTube = {
     do {
       this.quotaConsumption += 1;
       console.log('estimate of quota consumption:', this.quotaConsumption);
-      const playlistItemsResult = YouTube.PlaylistItems.list('snippet,contentDetails', {
-        fields: 'items(contentDetails/videoId,snippet/title),nextPageToken,pageInfo',
+      const playlistItemsResult = YouTube.PlaylistItems.list('snippet', {
+        fields: 'items/snippet(title,resourceId/videoId),nextPageToken,pageInfo',
         maxResults: 50, // NOTE: Acceptable values are 0 to 50, inclusive. The default value is 5.
         pageToken: nextPageToken,
         playlistId: ps.getProperty('YOUTUBE_PLAYLIST_ID'),
@@ -84,7 +84,7 @@ Modules.YouTube = {
   Video: class {
     static fromPlaylistItem(playlistItem) {
       const video = new Modules.YouTube.Video();
-      video.id = playlistItem.contentDetails.videoId;
+      video.id = playlistItem.snippet.resourceId.videoId;
       video.title = playlistItem.snippet.title;
       return video;
     }
