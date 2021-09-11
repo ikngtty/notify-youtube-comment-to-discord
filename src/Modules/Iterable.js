@@ -27,17 +27,13 @@ Modules.Iterable = class {
 
   take(n) {
     const gen = function* () {
-      if (n <= 0) {
-        return
-      }
-
-      let took = 0;
-      for (const item of this._contents) {
-        yield item;
-        took++;
-        if (took >= n) {
+      const iterator = this._contents[Symbol.iterator]();
+      for (let i = 0; i < n; i++) {
+        const iterated = iterator.next();
+        if (iterated.done) {
           break;
         }
+        yield iterated.value;
       }
     }.bind(this);
     return new Modules.Iterable(gen());
