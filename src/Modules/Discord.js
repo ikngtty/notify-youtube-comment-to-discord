@@ -32,9 +32,9 @@ Modules.Discord = {
   },
 
   _createEmbedForYouTubeComment(youtubeComment) {
-    fields = [];
+    const fields = [];
     if (youtubeComment.isReply) {
-      parent = youtubeComment.parentComment;
+      const parent = youtubeComment.parentComment;
       fields.push({
         name: 'reply to:',
         value: `${parent.authorDisplayName} : ${parent.textOriginal}`,
